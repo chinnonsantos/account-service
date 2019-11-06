@@ -1,8 +1,10 @@
 (ns account-service.handler-test
-  (:require [midje.sweet :refer :all]
+  (:require [midje.sweet :refer [facts
+                                 fact
+                                 =>]]
             ; [clojure.test :refer :all]
             [ring.mock.request :as mock]
-            [account-service.handler :refer :all]))
+            [account-service.handler :refer [app]]))
 
 ; (deftest test-app
 ;   (testing "main route"

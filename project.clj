@@ -3,13 +3,17 @@
   :url "https://github.com/chinnonsantos/account-service"
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [compojure "1.6.1"]
-                 [ring/ring-defaults "0.3.2"]]
+                 [compojure "1.6.1"] ;; Project template
+                 [ring/ring-defaults "0.3.2"]] ;; HTTP server
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler account-service.handler/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring/ring-mock "0.3.2"]
-                        [midje "1.9.9"]]
+                        [midje "1.9.9"] ;; TDD
+                        [ring/ring-core "1.7.1"]
+                        [ring/ring-jetty-adapter "1.7.1"] ;; Ring server abstraction
+                        ]
          :plugins [[lein-midje "3.2.1"]
-                   [lein-cloverage "1.1.2"]]}})
+                   [lein-cloverage "1.1.2"] ;; Test coverage
+                   ]}})
