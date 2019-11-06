@@ -1,19 +1,48 @@
-# account-service
+# ACCOUNT MICROSERVICES DEMO
 
-FIXME
+This project deals with a account microservice created from the leiningen '[compojure][]' template.
 
 ## Prerequisites
 
 You will need [Leiningen][] 2.0.0 or above installed.
 
+**Libraries:**
+
+- [Midje][] 1.9.9 (:dev)
+
+**Plugins:**
+
+- [lein-midje][] 3.2.1 (:dev)
+- [lein-cloverage][] 1.1.2 (:dev)
+
+[compojure]: https://github.com/weavejester/compojure
 [leiningen]: https://github.com/technomancy/leiningen
+[midje]: https://clojars.org/midje
+[lein-midje]: https://clojars.org/lein-midje
+[lein-cloverage]: https://clojars.org/lein-cloverage
 
 ## Running
 
 To start a web server for the application, run:
 
-    lein ring server
+    lein ring server-headless 9001
+
+## Running tests (TDD)
+
+To test the project, run:
+
+    lein midje
+
+To test the project in development stage, run:
+
+    lein midje :autotest
+
+> Automatically reloading the test with each change
+
+To check test coverage, run:
+
+    lein cloverage --runner :midje
 
 ## License
 
-Copyright © 2019 FIXME
+Copyright © 2019 | Chinnon Santos | Apache License 2.0
