@@ -9,6 +9,7 @@ You will need [Leiningen][] 2.0.0 or above installed.
 **Libraries:**
 
 - [Midje][] 1.9.9 (:dev)
+- [clj-http][] 3.10.0
 
 **Plugins:**
 
@@ -18,6 +19,7 @@ You will need [Leiningen][] 2.0.0 or above installed.
 [compojure]: https://github.com/weavejester/compojure
 [leiningen]: https://github.com/technomancy/leiningen
 [midje]: https://clojars.org/midje
+[clj-http]: https://clojars.org/clj-http
 [lein-midje]: https://clojars.org/lein-midje
 [lein-cloverage]: https://clojars.org/lein-cloverage
 
