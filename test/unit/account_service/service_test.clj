@@ -1,9 +1,9 @@
-(ns account-service.handler-test
+(ns account-service.service-test
   (:require [midje.sweet :refer [facts
                                  fact
                                  =>]]
             [ring.mock.request :as mock]
-            [account-service.handler :refer [app]]))
+            [account-service.service :refer [app]]))
 
 (facts "Hitting main route, check microservice health" :unit ;; filter label
 

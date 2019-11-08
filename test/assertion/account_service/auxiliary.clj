@@ -1,5 +1,5 @@
 (ns account-service.auxiliary
-  (:require [account-service.handler :refer [app]]
+  (:require [account-service.service :refer [app]]
             [ring.adapter.jetty :refer [run-jetty]]
             [clj-http.client :as http]))
 

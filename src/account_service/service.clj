@@ -1,4 +1,4 @@
-(ns account-service.handler
+(ns account-service.service
   (:require [compojure.core :refer [defroutes
                                     GET]]
             [compojure.route :as route]
