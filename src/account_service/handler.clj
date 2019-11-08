@@ -7,7 +7,9 @@
 
 (defroutes app-routes
   (GET "/" [] "Alive!")
-  (GET "/balance" [] "0")
+  (GET "/account/" [] "[]")
+  (GET "/account/:account-id/" [] "[]")
+  (GET "/account/from-customer/:customer-id/" [] "[]")
   (route/not-found "Not Found"))
 
 (def app
