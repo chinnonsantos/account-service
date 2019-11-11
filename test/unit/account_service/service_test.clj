@@ -1,56 +1,93 @@
 (ns account-service.service-test
   (:require [midje.sweet :refer [facts
                                  fact
-                                 =>]]
+                                 =>
+                                 against-background]]
             [ring.mock.request :as mock]
-            [account-service.service :refer [app]]))
+            [account-service.service :refer [app]]
+            [cheshire.core :as json]))
 
 (facts "Hitting main route, check microservice health" :unit ;; filter label
 
-       (fact "status response is 200"
-             (let [response (app (mock/request :get "/"))]
-               (:status response) => 200))
+       (against-background (json/generate-string {:message "Alive!"})
+                           => "{\"message\":\"Alive!\"}") ;; mock Cheshire
 
-       (fact "body response is 'Alive!'"
-             (let [response (app (mock/request :get "/"))]
-               (:body response) => "Alive!")))
+       (let [response (app (mock/request :get "/"))] ;; mock Ring
 
-(facts "Hitting accounts list route, check value" :unit ;; filter label
+         (fact "the header content-type is 'application/json'"
+               (get-in response [:headers "Content-Type"])
+               => "application/json; charset=utf-8")
 
-       (fact "status response is 200"
-             (let [response (app (mock/request :get "/account/"))]
-               (:status response) => 200))
+         (fact "status response is 200"
+               (:status response) => 200)
 
-       (fact "body response is 0"
-             (let [response (app (mock/request :get "/account/"))]
-               (:body response) => "[]")))
+         (fact "body response is a JSON, being key is ':message' and value is 'Alive!'"
+               (:body response) => "{\"message\":\"Alive!\"}")))
 
-(facts "Hitting account info route, check value" :unit ;; filter label
+(facts "Hitting accounts list route, check value" :unit
 
-       (fact "status response is 200"
-             (let [response (app (mock/request :get "/account/:account-id/"))]
-               (:status response) => 200))
+       (against-background (json/generate-string {:list []})
+                           => "{\"list\":[]}")
 
-       (fact "body response is 0"
-             (let [response (app (mock/request :get "/account/:account-id/"))]
-               (:body response) => "[]")))
+       (let [response (app (mock/request :get "/account/"))]
 
-(facts "Hitting account info route by customer id, check value" :unit ;; filter label
+         (fact "the header content-type is 'application/json'"
+               (get-in response [:headers "Content-Type"])
+               => "application/json; charset=utf-8")
 
-       (fact "status response is 200"
-             (let [response (app (mock/request :get "/account/from-customer/:customer-id/"))]
-               (:status response) => 200))
+         (fact "status response is 200"
+               (:status response) => 200)
 
-       (fact "body response is 0"
-             (let [response (app (mock/request :get "/account/from-customer/:customer-id/"))]
-               (:body response) => "[]")))
+         (fact "body response is a JSON, being key is :list and value is []"
+               (:body response) => "{\"list\":[]}")))
 
-(facts "Hitting invalid route, check routes not found" :unit ;; filter label
+(facts "Hitting account info route, check value" :unit
 
-       (fact "status response is 404"
-             (let [response (app (mock/request :get "/invalid/"))]
-               (:status response) => 404))
+       (against-background (json/generate-string {:account []})
+                           => "{\"account\":[]}")
 
-       (fact "body response is 'Not Found'"
-             (let [response (app (mock/request :get "/invalid/"))]
-               (:body response) => "Not Found")))
+       (let [response (app (mock/request :get "/account/:account-id/"))]
+
+         (fact "the header content-type is 'application/json'"
+               (get-in response [:headers "Content-Type"])
+               => "application/json; charset=utf-8")
+
+         (fact "status response is 200"
+               (:status response) => 200)
+
+         (fact "body response is a JSON, being key is :account and value is []"
+               (:body response) => "{\"account\":[]}")))
+
+(facts "Hitting account info route by customer id, check value" :unit
+
+       (against-background (json/generate-string {:account []})
+                           => "{\"account\":[]}")
+
+       (let [response (app (mock/request :get "/account/from-customer/:customer-id/"))]
+
+         (fact "the header content-type is 'application/json'"
+               (get-in response [:headers "Content-Type"])
+               => "application/json; charset=utf-8")
+
+         (fact "status response is 200"
+               (:status response) => 200)
+
+         (fact "body response is a JSON, being key is :account and value is []"
+               (:body response) => "{\"account\":[]}")))
+
+(facts "Hitting invalid route, check routes not found" :unit
+
+       (against-background (json/generate-string {:message "Not Found"})
+                           => "{\"message\":\"Not Found\"}")
+
+       (let [response (app (mock/request :get "/invalid/"))]
+
+         (fact "the header content-type is 'application/json'"
+               (get-in response [:headers "Content-Type"])
+               => "application/json; charset=utf-8")
+
+         (fact "status response is 404"
+               (:status response) => 404)
+
+         (fact "body response is a JSON, being key is :message and value is 'Not Found'"
+               (:body response) => "{\"message\":\"Not Found\"}")))

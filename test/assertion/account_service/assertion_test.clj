@@ -7,7 +7,8 @@
                                  after]]
             [account-service.auxiliary :refer [start-server!
                                                stop-server!
-                                               response]]))
+                                               response]]
+            [cheshire.core :as json]))
 
 (facts "Starting server, hitting some endpoints,
 checking responses and stopping server" :assertion ;; filter label
@@ -16,10 +17,13 @@ checking responses and stopping server" :assertion ;; filter label
                             (after :facts (stop-server!))] ;; `teardown`
 
                            (fact "Initial accounts list is []"
-                                 (response "/account/") => "[]")
+                                 (json/parse-string (response "/account/") true)
+                                 => {:list []})
 
-                           (fact "Initial account info id 123 is []"
-                                 (response "/account/123/") => "[]")
+                           (fact "Initial account info id :account-id is []"
+                                 (json/parse-string (response "/account/:account-id/") true)
+                                 => {:account []})
 
-                           (fact "Initial account info by customer id 321 is []"
-                                 (response "/account/from-customer/321/") => "[]")))
+                           (fact "Initial account info by customer id :customer-id is []"
+                                 (json/parse-string (response "/account/from-customer/:customer-id/") true)
+                                 => {:account []})))
