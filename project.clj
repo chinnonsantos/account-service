@@ -1,7 +1,7 @@
 (defproject account-service "1.0.0" ;; Semantic Versioning 2.0.0
   :description "Account microservices demo"
   :url "https://github.com/chinnonsantos/account-service"
-  :min-lein-version "2.0.0"
+  :min-lein-version "2.9.1"
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [compojure "1.6.1"] ;; Project template
                  [ring/ring-defaults "0.3.2"] ;; HTTP server
