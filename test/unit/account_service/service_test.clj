@@ -41,7 +41,7 @@
          (fact "body response is a JSON, being key is :list and value is []"
                (:body response) => "{\"list\":[]}")))
 
-(facts "Hitting account info route, check value" :unit
+(facts "Hitting account info route, by account id, check value" :unit
 
        (against-background (json/generate-string {:account []})
                            => "{\"account\":[]}")
@@ -58,7 +58,7 @@
          (fact "body response is a JSON, being key is :account and value is []"
                (:body response) => "{\"account\":[]}")))
 
-(facts "Hitting account info route by customer id, check value" :unit
+(facts "Hitting account info route, by customer id, check value" :unit
 
        (against-background (json/generate-string {:account []})
                            => "{\"account\":[]}")
