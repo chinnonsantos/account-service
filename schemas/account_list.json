@@ -1,0 +1,25 @@
+{
+  "account": [
+    {
+      "account-id": "8b84c28c-8947-4e67-87d8-68f65ebca105",
+      "customer-id": "7724236d-8544-4657-8863-75269c262b62",
+      "bank-branch": "0001",
+      "bank-account": "1234567-8",
+      "limit": 15000
+    },
+    {
+      "account-id": "95bb4dea-4873-4a47-9caf-134456af2028",
+      "customer-id": "03012004-3296-44aa-82ac-bede4f6b86f2",
+      "bank-branch": "0001",
+      "bank-account": "7654321-0",
+      "limit": 3400
+    },
+    {
+      "account-id": "9fac812e-2847-4680-91a8-1d0f63bf8682",
+      "customer-id": "89cf0f93-8a83-4869-87cf-483a40ca363c",
+      "bank-branch": "0001",
+      "bank-account": "2357111-3",
+      "limit": 800
+    }
+  ]
+}
