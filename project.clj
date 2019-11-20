@@ -1,4 +1,5 @@
 (defproject account-service "1.0.0" ;; Semantic Versioning 2.0.0
+  :uberjar-name "account-%s.jar"
   :description "Account microservices demo"
   :url "https://github.com/chinnonsantos/account-service"
   :min-lein-version "2.9.1"
@@ -10,7 +11,8 @@
                  [ring/ring-json "0.5.0"] ;; Wrappers for JSON
                  ]
   :plugins [[lein-ring "0.12.5"]]
-  :ring {:handler account-service.service/app}
+  :ring {:handler account-service.service/app
+         :port    9001}
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.2"]
                                   [midje "1.9.9"] ;; TDD
