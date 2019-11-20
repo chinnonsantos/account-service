@@ -4,6 +4,7 @@
                                     POST]]
             [compojure.route :as route]
             [account-service.db.saving-account :as db]
+            [account-service.components.accounts :refer [valid?]]
             [ring.middleware.defaults :refer [wrap-defaults
                                               api-defaults]]
             [ring.middleware.json :refer [wrap-json-body]]
@@ -25,8 +26,10 @@
   (GET "/account/from-customer/:customer-id/" []
     (header-json {:account []}))
   (POST "/account/" request
-    (-> (db/register! (:body request))
-        (header-json 201)))
+    (if (valid? (:body request))
+      (-> (db/register! (:body request))
+          (header-json 201))
+      (header-json {:mensagem "Unprocessable Entity"} 422)))
   (route/not-found (header-json {:message "Not Found"})))
 
 (def app

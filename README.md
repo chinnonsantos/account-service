@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/chinnonsantos/account-service.svg?branch=master)](https://travis-ci.org/chinnonsantos/account-service)
 
-This project deals with a account microservice created from the leiningen '[compojure][]' template.
+This project deals with an account microservice created from the leiningen '[compojure][]' template.
 
 ## Prerequisites
 

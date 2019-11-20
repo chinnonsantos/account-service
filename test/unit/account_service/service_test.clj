@@ -4,10 +4,9 @@
                                  =>
                                  against-background]]
             [account-service.db.saving-account :as db]
-            [account-service.auxiliary :refer [account-st
-                                               account-st-json]]
-            [ring.mock.request :as mock]
+            [account-service.components.accounts :refer [valid?]]
             [account-service.service :refer [app]]
+            [ring.mock.request :as mock]
             [cheshire.core :as json]))
 
 (facts "Hitting main route, checking microservice health" :unit ;; filter label
@@ -80,10 +79,15 @@
 
 (facts "Hitting account registration route with account test data, checking response" :unit
 
-       (against-background (db/register! account-st) => account-st)
+       (against-background [(valid? {:limit 15000})
+                            => true ;; Mock of `trans/valid?`
+                            (db/register! {:limit 15000})
+                            => {:limit 15000} ;; Mock of `db/register!`
+                            ])
 
-       (let [response (app (-> (mock/request :post "/account/")
-                               (mock/json-body account-st)))]
+       (let [response (app (-> (mock/request :post "/account/") ;; Mock of `/account/` route
+                               (mock/json-body {:limit 15000}) ;; Creating JSON for body POST
+                               ))]
 
          (fact "the header content-type is 'application/json'"
                (get-in response [:headers "Content-Type"])
@@ -92,8 +96,47 @@
          (fact "status response is 201"
                (:status response) => 201)
 
-         (fact "body response is a JSON, with the same content that was submitted")
-         (:body response) => account-st-json))
+         (fact "body response is a JSON, with the same content that was submitted"
+               (:body response) => "{\"limit\":15000}")))
+
+(facts "Hitting account register route with account test data, checking response" :unit
+
+       (against-background [(valid? {:limit 15000})
+                            => true ;; Mock of `trans/valid?`
+                            (db/register! {:limit 15000})
+                            => {:limit 15000} ;; Mock of `db/register!`
+                            ])
+
+       (let [response (app (-> (mock/request :post "/account/") ;; Mock of `/account/` route
+                               (mock/json-body {:limit 15000}) ;; Creating JSON for body POST
+                               ))]
+
+         (fact "the header content-type is 'application/json'"
+               (get-in response [:headers "Content-Type"])
+               => "application/json; charset=utf-8")
+
+         (fact "status response is 201"
+               (:status response) => 201)
+
+         (fact "body response is a JSON, with the same content that was submitted"
+               (:body response) => "{\"limit\":15000}")))
+
+(facts "Hitting customer register route with INVALID client test data, checking response" :unit
+
+       (against-background [(valid? {:anotherkey "Any!"}) => false])
+
+       (let [response (app (-> (mock/request :post "/account/")
+                               (mock/json-body {:anotherkey "Any!"})))]
+
+         (fact "the header content-type is 'application/json'"
+               (get-in response [:headers "Content-Type"])
+               => "application/json; charset=utf-8")
+
+         (fact "status response is 422"
+               (:status response) => 422)
+
+         (fact "body response is a JSON, with the same content that was submitted"
+               (:body response) => "{\"mensagem\":\"Unprocessable Entity\"}")))
 
 (facts "Hitting invalid route, checking routes not found" :unit
 

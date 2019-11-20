@@ -10,7 +10,7 @@
             [account-service.auxiliary :refer [account-st
                                                account-id]]))
 
-(facts "Store a account in an atom" :unit
+(facts "Store an account in an atom" :unit
 
        (against-background
         [(before :facts (reset-records!))]
