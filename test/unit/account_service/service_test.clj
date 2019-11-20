@@ -3,11 +3,14 @@
                                  fact
                                  =>
                                  against-background]]
+            [account-service.db.saving-account :as db]
+            [account-service.auxiliary :refer [account-st
+                                               account-st-json]]
             [ring.mock.request :as mock]
             [account-service.service :refer [app]]
             [cheshire.core :as json]))
 
-(facts "Hitting main route, check microservice health" :unit ;; filter label
+(facts "Hitting main route, checking microservice health" :unit ;; filter label
 
        (against-background (json/generate-string {:message "Alive!"})
                            => "{\"message\":\"Alive!\"}") ;; mock Cheshire
@@ -24,7 +27,7 @@
          (fact "body response is a JSON, being key is ':message' and value is 'Alive!'"
                (:body response) => "{\"message\":\"Alive!\"}")))
 
-(facts "Hitting accounts list route, check value" :unit
+(facts "Hitting accounts list route, checking response" :unit
 
        (against-background (json/generate-string {:list []})
                            => "{\"list\":[]}")
@@ -41,7 +44,7 @@
          (fact "body response is a JSON, being key is :list and value is []"
                (:body response) => "{\"list\":[]}")))
 
-(facts "Hitting account info route, by account id, check value" :unit
+(facts "Hitting account info route, by account id, checking response" :unit
 
        (against-background (json/generate-string {:account []})
                            => "{\"account\":[]}")
@@ -58,7 +61,7 @@
          (fact "body response is a JSON, being key is :account and value is []"
                (:body response) => "{\"account\":[]}")))
 
-(facts "Hitting account info route, by customer id, check value" :unit
+(facts "Hitting account info route, by customer id, checking response" :unit
 
        (against-background (json/generate-string {:account []})
                            => "{\"account\":[]}")
@@ -75,7 +78,24 @@
          (fact "body response is a JSON, being key is :account and value is []"
                (:body response) => "{\"account\":[]}")))
 
-(facts "Hitting invalid route, check routes not found" :unit
+(facts "Hitting account registration route with account test data, checking response" :unit
+
+       (against-background (db/register! account-st) => account-st)
+
+       (let [response (app (-> (mock/request :post "/account/")
+                               (mock/json-body account-st)))]
+
+         (fact "the header content-type is 'application/json'"
+               (get-in response [:headers "Content-Type"])
+               => "application/json; charset=utf-8")
+
+         (fact "status response is 201"
+               (:status response) => 201)
+
+         (fact "body response is a JSON, with the same content that was submitted")
+         (:body response) => account-st-json))
+
+(facts "Hitting invalid route, checking routes not found" :unit
 
        (against-background (json/generate-string {:message "Not Found"})
                            => "{\"message\":\"Not Found\"}")
