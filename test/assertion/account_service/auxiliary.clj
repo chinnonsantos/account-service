@@ -42,7 +42,7 @@
 (def other-customer-id (str (UUID/randomUUID)))
 
 (def account-st
-  {:customer-id "7724236d-8544-4657-8863-75269c262b62"
+  {:customer-id customer-id
    :bank-branch "0001"
    :bank-account "1234567-8"
    :limit 15000})

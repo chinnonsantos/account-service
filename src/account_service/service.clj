@@ -24,8 +24,9 @@
   (GET "/account/:account-id/" request
     (let [account-id (:account-id (:route-params request))]
       (header-json (db/account-by-id! account-id))))
-  (GET "/account/from-customer/:customer-id/" []
-    (header-json {}))
+  (GET "/account/from-customer/:customer-id/" request
+    (let [customer-id (:customer-id (:route-params request))]
+      (header-json (db/account-by-customer-id! customer-id))))
   (POST "/account/" request
     (if (valid? (:body request))
       (-> (db/register! (:body request))

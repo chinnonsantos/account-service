@@ -42,13 +42,22 @@
                   (response)
                   (json/parse-string true)) => {})
 
-        (fact "check response body when get account by ID (account info)"
+        (fact "check response body when get an account by ID (account info)"
               (let [response-post (http/post (endpoint "/account/")
                                              (content-like-json account-st))
                     account-registed (json/parse-string (:body response-post) true)
                     account-id-registed (:account-id account-registed)]
 
                 (-> (str "/account/" account-id-registed "/")
+                    (response)
+                    (json/parse-string true)) => account-registed))
+
+        (fact "check response body when get an account by customer ID (account info)"
+              (let [response-post (http/post (endpoint "/account/")
+                                             (content-like-json account-st))
+                    account-registed (json/parse-string (:body response-post) true)]
+
+                (-> (str "/account/from-customer/" customer-id "/")
                     (response)
                     (json/parse-string true)) => account-registed))
 
