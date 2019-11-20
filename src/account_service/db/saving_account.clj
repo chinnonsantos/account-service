@@ -22,3 +22,10 @@
     (->> (merge account {:account-id (str account-id)})
          (swap! records conj)
          (last))))
+
+(defn account-by-id!
+  "Get an account by ID"
+  [account-id]
+  (->> (filter #(= account-id (:account-id %)) (accounts!))
+       (last)
+       (conj {})))

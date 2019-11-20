@@ -21,8 +21,9 @@
     (header-json {:message "Alive!"}))
   (GET "/account/" []
     (header-json (db/accounts!)))
-  (GET "/account/:account-id/" []
-    (header-json {}))
+  (GET "/account/:account-id/" request
+    (let [account-id (:account-id (:route-params request))]
+      (header-json (db/account-by-id! account-id))))
   (GET "/account/from-customer/:customer-id/" []
     (header-json {}))
   (POST "/account/" request
