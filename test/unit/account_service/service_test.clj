@@ -74,17 +74,13 @@
          (fact "body response is a JSON, initial value should be {}"
                (:body response) => "{}")))
 
-(facts "Hitting account registration route with account test data, checking response" :unit
+(facts "Hitting account register route with account test data, checking response" :unit
 
-       (against-background [(valid? {:limit 15000})
-                            => true ;; Mock of `trans/valid?`
-                            (db/register! {:limit 15000})
-                            => {:limit 15000} ;; Mock of `db/register!`
-                            ])
+       (against-background [(valid? {:limit 15000}) => true
+                            (db/register! {:limit 15000}) => {:limit 15000}])
 
-       (let [response (app (-> (mock/request :post "/account/") ;; Mock of `/account/` route
-                               (mock/json-body {:limit 15000}) ;; Creating JSON for body POST
-                               ))]
+       (let [response (app (-> (mock/request :post "/account/")
+                               (mock/json-body {:limit 15000})))]
 
          (fact "the header content-type is 'application/json'"
                (get-in response [:headers "Content-Type"])
@@ -98,15 +94,11 @@
 
 (facts "Hitting account register route with account test data, checking response" :unit
 
-       (against-background [(valid? {:limit 15000})
-                            => true ;; Mock of `trans/valid?`
-                            (db/register! {:limit 15000})
-                            => {:limit 15000} ;; Mock of `db/register!`
-                            ])
+       (against-background [(valid? {:limit 15000}) => true
+                            (db/register! {:limit 15000}) => {:limit 15000}])
 
-       (let [response (app (-> (mock/request :post "/account/") ;; Mock of `/account/` route
-                               (mock/json-body {:limit 15000}) ;; Creating JSON for body POST
-                               ))]
+       (let [response (app (-> (mock/request :post "/account/")
+                               (mock/json-body {:limit 15000})))]
 
          (fact "the header content-type is 'application/json'"
                (get-in response [:headers "Content-Type"])

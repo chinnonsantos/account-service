@@ -20,7 +20,7 @@
   (GET "/" []
     (header-json {:message "Alive!"}))
   (GET "/account/" []
-    (header-json '()))
+    (header-json (db/accounts!)))
   (GET "/account/:account-id/" []
     (header-json {}))
   (GET "/account/from-customer/:customer-id/" []

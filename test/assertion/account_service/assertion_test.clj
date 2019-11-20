@@ -14,15 +14,18 @@
                                                customer-id
                                                account-st
                                                account-st-json
+                                               account-nd
+                                               account-rd
                                                content-like-json
-                                               rm-id-from-json]]
+                                               rm-id-from-json
+                                               rm-id]]
             [cheshire.core :as json]
             [clj-http.client :as http]))
 
 (facts "Starting server, hitting some endpoints, checking responses and stopping server" :assertion ;; filter label
 
        (against-background
-        [(before :facts (start-server!)) ;; `setup`
+        [(before :facts [(reset-records!) (start-server!)]) ;; `setup`
          (after :facts (stop-server!))] ;; `teardown`
 
         (fact "initial accounts list is an empty list"
@@ -43,7 +46,59 @@
               (let [response (http/post (endpoint "/account/")
                                         (content-like-json account-st))]
                 (-> (:body response)
-                    (rm-id-from-json)) => account-st-json))))
+                    (rm-id-from-json)) => account-st-json))
+
+        (fact "account list count check when registering only one account, should list only one"
+
+              (http/post (endpoint "/account/")
+                         (content-like-json account-st))
+
+              (let [customer-list (-> (response "/account/")
+                                      (json/parse-string true))]
+
+                (map rm-id customer-list) => (list account-st)))
+
+        (fact "account list count check when registering two account, should list only two"
+
+              (http/post (endpoint "/account/")
+                         (content-like-json account-st))
+
+              (http/post (endpoint "/account/")
+                         (content-like-json account-nd))
+
+              (let [customer-list (-> (response "/account/")
+                                      (json/parse-string true))]
+
+                (map rm-id customer-list) => (list account-st
+                                                   account-nd)))
+
+        (fact "account list count check when registering three account, should list only three"
+
+              (http/post (endpoint "/account/")
+                         (content-like-json account-st))
+
+              (http/post (endpoint "/account/")
+                         (content-like-json account-nd))
+
+              (http/post (endpoint "/account/")
+                         (content-like-json account-rd))
+
+              (let [customer-list (-> (response "/account/")
+                                      (json/parse-string true))]
+
+                (map rm-id customer-list) => (list account-st
+                                                   account-nd
+                                                   account-rd)))
+
+        (fact "account list count check when registering only one account with invalid data, should list none"
+
+              (http/post (endpoint "/account/")
+                         (content-like-json {:name "Uai!"}))
+
+              (let [customer-list (-> (response "/account/")
+                                      (json/parse-string true))]
+
+                (map rm-id customer-list) => '()))))
 
 (facts "Hitting account register route, with invalid account data, checking response status" :assertion
 
