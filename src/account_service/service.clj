@@ -3,36 +3,24 @@
                                     GET
                                     POST]]
             [compojure.route :as route]
-            [account-service.db.saving-account :as db]
-            [account-service.components.accounts :refer [valid?]]
+            [account-service.components.service :refer [home-page
+                                                         list-accounts!
+                                                         get-account!
+                                                         customer->get-account!
+                                                         create-account!
+                                                         not-found]]
             [ring.middleware.defaults :refer [wrap-defaults
                                               api-defaults]]
-            [ring.middleware.json :refer [wrap-json-body]]
-            [cheshire.core :as json]))
-
-(defn header-json [data-map & [status]]
-  {:status (or status 200)
-   :headers {"Content-Type"
-             "application/json; charset=utf-8"}
-   :body (json/generate-string data-map)})
+            [ring.middleware.json :refer [wrap-json-body]]))
 
 (defroutes app-routes
-  (GET "/" []
-    (header-json {:message "Alive!"}))
-  (GET "/account/" []
-    (header-json (db/accounts!)))
-  (GET "/account/:account-id/" request
-    (let [account-id (:account-id (:route-params request))]
-      (header-json (db/account-by-id! account-id))))
+  (GET "/" [] (home-page))
+  (GET "/account/" [] (list-accounts!))
+  (GET "/account/:account-id/" request (get-account! request))
   (GET "/account/from-customer/:customer-id/" request
-    (let [customer-id (:customer-id (:route-params request))]
-      (header-json (db/account-by-customer-id! customer-id))))
-  (POST "/account/" request
-    (if (valid? (:body request))
-      (-> (db/register! (:body request))
-          (header-json 201))
-      (header-json {:mensagem "Unprocessable Entity"} 422)))
-  (route/not-found (header-json {:message "Not Found"})))
+    (customer->get-account! request))
+  (POST "/account/" request (create-account! request))
+  (route/not-found (not-found)))
 
 (def app
   (-> (wrap-defaults app-routes api-defaults)
