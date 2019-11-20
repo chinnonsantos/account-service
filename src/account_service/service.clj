@@ -20,11 +20,11 @@
   (GET "/" []
     (header-json {:message "Alive!"}))
   (GET "/account/" []
-    (header-json {:list []}))
+    (header-json '()))
   (GET "/account/:account-id/" []
-    (header-json {:account []}))
+    (header-json {}))
   (GET "/account/from-customer/:customer-id/" []
-    (header-json {:account []}))
+    (header-json {}))
   (POST "/account/" request
     (if (valid? (:body request))
       (-> (db/register! (:body request))

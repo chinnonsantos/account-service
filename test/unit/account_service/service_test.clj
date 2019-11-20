@@ -28,8 +28,7 @@
 
 (facts "Hitting accounts list route, checking response" :unit
 
-       (against-background (json/generate-string {:list []})
-                           => "{\"list\":[]}")
+       (against-background (json/generate-string '()) => "[]")
 
        (let [response (app (mock/request :get "/account/"))]
 
@@ -40,13 +39,12 @@
          (fact "status response is 200"
                (:status response) => 200)
 
-         (fact "body response is a JSON, being key is :list and value is []"
-               (:body response) => "{\"list\":[]}")))
+         (fact "body response is a JSON, initial value should be []"
+               (:body response) => "[]")))
 
 (facts "Hitting account info route, by account id, checking response" :unit
 
-       (against-background (json/generate-string {:account []})
-                           => "{\"account\":[]}")
+       (against-background (json/generate-string {}) => "{}")
 
        (let [response (app (mock/request :get "/account/:account-id/"))]
 
@@ -57,13 +55,12 @@
          (fact "status response is 200"
                (:status response) => 200)
 
-         (fact "body response is a JSON, being key is :account and value is []"
-               (:body response) => "{\"account\":[]}")))
+         (fact "body response is a JSON, initial value should be {}"
+               (:body response) => "{}")))
 
 (facts "Hitting account info route, by customer id, checking response" :unit
 
-       (against-background (json/generate-string {:account []})
-                           => "{\"account\":[]}")
+       (against-background (json/generate-string {}) => "{}")
 
        (let [response (app (mock/request :get "/account/from-customer/:customer-id/"))]
 
@@ -74,8 +71,8 @@
          (fact "status response is 200"
                (:status response) => 200)
 
-         (fact "body response is a JSON, being key is :account and value is []"
-               (:body response) => "{\"account\":[]}")))
+         (fact "body response is a JSON, initial value should be {}"
+               (:body response) => "{}")))
 
 (facts "Hitting account registration route with account test data, checking response" :unit
 

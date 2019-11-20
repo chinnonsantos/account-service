@@ -27,17 +27,17 @@
 
         (fact "initial accounts list is an empty list"
               (-> (response "/account/")
-                  (json/parse-string true)) => {:list []})
+                  (json/parse-string true)) => '())
 
         (fact "initial account info is an empty object"
               (-> (str "/account/" account-id "/")
                   (response)
-                  (json/parse-string  true)) => {:account []})
+                  (json/parse-string  true)) => {})
 
         (fact "initial account info by customer ID is an empty list"
               (-> (str "/account/from-customer/" customer-id "/")
                   (response)
-                  (json/parse-string true)) => {:account []})
+                  (json/parse-string true)) => {})
 
         (fact "check response body after register an account"
               (let [response (http/post (endpoint "/account/")
