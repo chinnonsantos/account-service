@@ -2,7 +2,7 @@
 
 ## Build status
 
-[![Build Status](https://travis-ci.org/chinnonsantos/account-service.svg?branch=master)](https://travis-ci.org/chinnonsantos/account-service)
+[![Build Status](https://travis-ci.org/chinnonsantos/account-service.svg?branch=master)](https://travis-ci.org/chinnonsantos/account-service) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 This project deals with an account microservice created from the leiningen '[compojure][]' template.
 
