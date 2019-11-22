@@ -1,8 +1,6 @@
 # ACCOUNT MICROSERVICES DEMO
 
-## Build status
-
-[![Build Status](https://travis-ci.org/chinnonsantos/account-service.svg?branch=master)](https://travis-ci.org/chinnonsantos/account-service) [![codecov](https://codecov.io/gh/chinnonsantos/account-service/branch/master/graph/badge.svg)](https://codecov.io/gh/chinnonsantos/account-service) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![Travis build status](https://img.shields.io/travis/chinnonsantos/account-service/master?logo=travis)](https://travis-ci.org/chinnonsantos/account-service) [![Codecov coverage](https://codecov.io/gh/chinnonsantos/account-service/branch/master/graph/badge.svg)](https://codecov.io/gh/chinnonsantos/account-service) [![Clojure version](https://img.shields.io/badge/clojure-v1.10.0-blueviolet?logo=clojure)](https://clojure.org/) [![GitHub license](https://img.shields.io/github/license/chinnonsantos/account-service?logo=apache)](http://www.apache.org/licenses/) [![Twitter follow](https://img.shields.io/twitter/follow/chinnonsantos?label=follow&style=flat&logo=twitter)](https://twitter.com/intent/follow?screen_name=chinnonsantos) [![Open source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 This project deals with an account microservice created from the leiningen '[compojure][]' template.
 
