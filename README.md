@@ -4,7 +4,7 @@
 
 This project deals with an account microservice created from the leiningen '[compojure][]' template.
 
-Using by [Nudemo mobile app][].
+Usinged by [Nudemo mobile app][].
 
 ## Prerequisites
 
@@ -120,6 +120,61 @@ To run standalone artifact (need Java JRE)
 > See all releases of this project [here][]!
 
 [here]: https://github.com/chinnonsantos/account-service/releases
+
+## Containerization w/ Docker
+
+This project is available in a containerized form on the **[Docker hub][]** repository.
+
+To go up the service manually with **[Docker][] commands**
+
+    # Ubuntu eoan -> 19.10
+    sudo docker pull ubuntu:eoan
+    sudo docker network create nudemo-services
+    sudo docker run -it --rm --name account --net nudemo-services -p 9001:9001 ubuntu:eoan
+
+    ## Inside the container... (sudo docker attach account-service)
+    # Updating Ubuntu APT packages
+    apt update
+    # Installing Wget package
+    apt install wget -y
+    # Installing OpenJDK 11
+    apt install openjdk-11-jre-headless -y && java --version
+    # Installing Leiningen
+    cd /usr/local/bin && wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && ls
+    chmod +x lein && ls && ./lein && lein -v
+    # Creating app directory
+    mkdir /home/account-service
+
+    ## Outside the container... (Ctrl+P and Ctrl+Q)
+    # Copying project files to container ('~/Projects/' change to 'YOUR_PROJECT_FOLDER')
+    sudo docker cp ~/Projects/account-service/src account-service:/home/account-service/src
+    sudo docker cp ~/Projects/account-service/project.clj account-service:/home/account-service
+
+    ## Inside the container... (sudo docker attach account-service)
+    # Downloading Leiningen project dependencies
+    cd /home/account-service
+    lein deps
+    # Create standalone artifact (.jar)
+    lein ring uberjar
+    # Uninstalling packages and cleaning the system for reduce container size
+    apt remove wget -y && apt autoremove -y && apt autoclean -y && apt clean -y
+    cp target/account-1.0.0.jar .
+    rm -rf /var/lib/apt/lists/ /tmp/ /var/tmp/ /root/.lein/ /root/.m2/ /root/.wget-hsts /usr/local/bin/lein /home/account-service/project.clj /home/account-service/src/ /home/account-service/target/ /home/account-service/test/
+    # Starting service (run standalone artifact)
+    java -jar account-1.0.0.jar
+
+To go up the service automatically with **[Dockerfile][]**
+
+    sudo docker build -t chinnonsantos/account-service:1.0.0 --no-cache .
+    sudo docker network create nudemo-services
+    sudo docker run -d --rm --name account --net nudemo-services -p 9001:9001 chinnonsantos/account-service:1.0.0
+
+> See all images of this project [here][1]!
+
+[Docker hub]: https://hub.docker.com/
+[Docker]: https://docs.docker.com/
+[Dockerfile]: https://docs.docker.com/engine/reference/builder/
+[1]: https://hub.docker.com/r/chinnonsantos/account-service/tags
 
 ## License
 
