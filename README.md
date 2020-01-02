@@ -125,10 +125,14 @@ To run standalone artifact (need Java JRE)
 
 This project is available in a containerized form on the **[Docker hub][]** repository.
 
+To running the container with **[Docker][] commands**
+
+    sudo docker network create nudemo-services
+    sudo docker run -d --rm --name account --net nudemo-services -p 9001:9001 chinnonsantos/account-service:1.0.0
+
 To go up the service manually with **[Docker][] commands**
 
     # Ubuntu eoan -> 19.10
-    sudo docker pull ubuntu:eoan
     sudo docker network create nudemo-services
     sudo docker run -it --rm --name account --net nudemo-services -p 9001:9001 ubuntu:eoan
 
@@ -178,4 +182,4 @@ To go up the service automatically with **[Dockerfile][]**
 
 ## License
 
-Copyright © 2019 | Chinnon Santos | Apache License 2.0
+Copyright © 2019 ~ 2020 | Chinnon Santos | Apache License 2.0
